@@ -1,0 +1,35 @@
+{% block sidebar %}
+    <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
+     styles, `#sidebar-checkbox` for behavior. -->
+    <input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+
+    <!-- Toggleable sidebar -->
+    <div class="sidebar" id="sidebar">
+
+      <nav class="sidebar-nav">
+        <div>
+         <span class="sidebar-nav-item">
+{%         if 'title' in metadata %}
+            <p style="text-align: center; font-weight: bold; padding-bottom: 1em;">{{ metadata.title|join(' - ') }}</p>
+{%         endif %}
+        [TOC]
+        </span>
+        </div>
+      </nav>
+      <p>
+
+      <div class="sidebar-item">
+{%     if logo %}
+{%      if 'logolink' in metadata %}
+        <a href="{{ metadata.logolink }}">{% endif %}<img src="data:image/{{ logo[1] }};base64,
+{{ logo[0] }}">
+        </a>
+{%     endif %}
+        <hr/>
+        {% if metadata.copyright %}<p>&copy; {{ date.year }} {{ gen_copyright_list(metadata.copyright)|join(', ') }}</p>{% endif %}
+      </div>
+    </div>
+
+    <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+{% endblock sidebar %}
+

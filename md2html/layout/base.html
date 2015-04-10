@@ -1,0 +1,22 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    {% block head%}{% endblock head%}
+  </head>
+
+  <body{% if background %} background="data:image/{{ background[1] }};base64,{{ background[0] }}"{% endif %}{% if 'theme' in metadata %} class="{{ metadata['theme']|join(' ') }}"{% endif %}>
+    <div class="wrap">
+      <div id="contentDiv">
+        {% block content %}{% endblock content %}
+      </div>
+
+      <div id="footer">
+        <hr>
+
+        {% block footer %}{% include "layout/footer.html" %}{% endblock footer %}
+      </div>
+    </div>
+{% block sidebar %}{% include "layout/sidebar.html" %}{% endblock sidebar %}
+
+  </body>
+</html>
+

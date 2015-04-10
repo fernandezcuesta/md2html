@@ -1,0 +1,48 @@
+{% extends "layout/base.html" %}
+    {% block head%}
+    <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <!-- Enable responsiveness on mobile devices -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+{% for item in metadata if item|upper not in ['CSS', 'TITLE', 'THEME'] %}
+    <meta name="{{ item }}" content="{{ metadata[item]|join(', ') }}">
+{% endfor %}
+{% if 'date' not in metadata %}
+    <meta name="date" content="{{ date.strftime('%d-%B-%Y') }}">
+{% endif %}
+
+    {% if 'title' in metadata %}<title>{{ metadata.title|join(' - ') }}</title>{% endif %}
+
+    {% if favicon %}
+<!-- FAVICON -->
+<link id="favicon" rel="icon" type="image/png" href="data:image/{{ favicon[1] }};base64,
+{{ favicon[0] }}">
+    {% endif %}
+
+    <!-- CSS styles -->
+    <style type="text/css">
+        {{ css_lines }}
+        {% if 'css' in metadata %}{{ css_compress(metadata['css']) }}{% endif %}
+
+    </style>
+{%   endblock head%}
+
+{%    block content %}
+ <div class="title">
+{%     for item in metadata.title %}
+         <p>{{ item }}</p>
+{%       endfor %}
+       </div>
+         <div class="content">
+<!-- CONTENT PASSED FROM MARKDOWN CONVERSION -->
+{%     if content %}
+      {{ content }}
+<!-- END OF CONVERTED MARKDOWN CONTENT -->
+{%     else %}
+         {{ lipsum() }}
+{%     endif %}
+       </div>
+{%    endblock content %}
+
