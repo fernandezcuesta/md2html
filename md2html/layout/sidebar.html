@@ -12,24 +12,26 @@
 {%         if 'title' in metadata %}
             <p style="text-align: center; font-weight: bold; padding-bottom: 1em;">{{ metadata.title|join(' - ') }}</p>
 {%         endif %}
-        [TOC]
+            {% if toc %}{{ toc }}{% endif %}
         </span>
         </div>
-      </nav>
-      <p>
-
+      <br>
       <div class="sidebar-item">
 {%     if logo %}
 {%      if 'logolink' in metadata %}
-        <a href="{{ metadata.logolink }}">{% endif %}<img src="data:image/{{ logo[1] }};base64,
-{{ logo[0] }}">
+        <a href="{{ metadata.logolink }}">{% endif %}<img src="{{ logo }}">
         </a>
 {%     endif %}
-        <hr/>
-        {% if metadata.copyright %}<p>&copy; {{ date.year }} {{ gen_copyright_list(metadata.copyright)|join(', ') }}</p>{% endif %}
+       <br>
+{%     if metadata.copyright %}<p>&copy; {{ date.year }} {{ gen_copyright_list(metadata.copyright)|join(', ') }}</p>{% endif %}
       </div>
+
+      </nav>
+
     </div>
 
-    <label for="sidebar-checkbox" class="sidebar-toggle"></label>
 {% endblock sidebar %}
 
+{% block sblabel %}
+    <label for="sidebar-checkbox" class="sidebar-toggle" title="Table of Contents"></label>
+{% endblock sblabel %}

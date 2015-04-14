@@ -3,19 +3,20 @@
     {% block head%}{% endblock head%}
   </head>
 
-  <body{% if background %} background="data:image/{{ background[1] }};base64,{{ background[0] }}"{% endif %}{% if 'theme' in metadata %} class="{{ metadata['theme']|join(' ') }}"{% endif %}>
+  <body{% if background %} background="{{ background }}"{% endif %}{% if 'theme' in metadata %} class="{{ metadata['theme']|join(' ') }}"{% endif %}>
+
     <div class="wrap">
       <div id="contentDiv">
         {% block content %}{% endblock content %}
       </div>
 
+{%   block sidebar %}{% include "layout/sidebar.html" %}{% endblock sidebar %}
+
       <div id="footer">
         <hr>
-
-        {% block footer %}{% include "layout/footer.html" %}{% endblock footer %}
+{%         block footer %}{% include "layout/footer.html" %}{% endblock footer %}
       </div>
     </div>
-{% block sidebar %}{% include "layout/sidebar.html" %}{% endblock sidebar %}
 
   </body>
 </html>

@@ -9,15 +9,20 @@ Created on Tue Apr  7 17:18:42 2015
 import jinja2
 import markdown
 import os
+import re
 import argparse
 import sys
 import imghdr
+from cStringIO import StringIO
+from rfc3987 import parse
+from urllib2 import urlopen
 from csscompressor import compress
 from datetime import date
 
 THIS_DIR = os.path.dirname(os.path.abspath(__file__))
 HTML_TEMPLATE = 'layout/template.html'
-MD_EXTENSIONS = ['codehilite', 'tables', 'toc', 'meta']
+MD_EXTENSIONS = ['codehilite', 'tables', "toc(marker='')", 'meta']
+
 
 def render_html(**kwargs):
     """ Renders an html from jinja2 templates filled with content converted
@@ -46,38 +51,58 @@ def render_html(**kwargs):
     environment = jinja2.Environment(loader=loader,
                                      trim_blocks=True)
     environment.globals['include_raw'] = \
-      lambda filename: jinja2.Markup(loader.get_source(environment,
-                                                       filename)[0]) \
-                       if os.path.exists(filename) else ''
+        lambda filename: jinja2.Markup(loader.get_source(environment,
+                                                         filename)[0]) \
+        if os.path.exists(filename) else ''
 
     environment.globals['gen_author_list'] = \
-      lambda authors, emails: [''] if len(authors) != len(emails) else \
-                              [u'<a href="mailto:{}">{}</a>'.format(emails[i],
-                                                                    author)
-                               for (i, author) in enumerate(authors)]
+        lambda authors, emails: [''] if len(authors) != len(emails) else \
+        [u'<a href="mailto:{}">{}</a>'.format(emails[i], author)
+         for (i, author) in enumerate(authors)]
 
     environment.globals['gen_copyright_list'] = \
-      lambda copyright: [u'<a href={1}>{0}</a>'.format(*item.split(','))
-                         for item in copyright]
+        lambda copyright: [u'<a href={1}>{0}</a>'.format(*item.split(','))
+                           for item in copyright]
 
     environment.globals['css_compress'] = \
-      lambda css_list: ';'.join(css_compress(*['css/%s' % css for css in css_list]))
+        lambda css_list: ';'.join(css_compress(*['css/%s' % css
+                                                 for css in css_list]))
 
     template = environment.get_template(html_template)
-    content, metadata = md2html(**kwargs)
+    content, metadata, toc = md2html(**kwargs)
 
-    html_str = template.render(css_lines=';'.join(css_compress(*css_files)),
-                               content=content,
-                               metadata=metadata,
-                               favicon=to_b64_image(favicon_file),
-                               logo=to_b64_image(logo_img),
-                               background=to_b64_image(background_img),
-                               date=date.today()
-                              )
+    fbuffer = StringIO()
+    fbuffer.write(template.render(css_lines=';'.join(css_compress(*css_files)),
+                                  content=content,
+                                  metadata=metadata,
+                                  toc=toc,
+                                  favicon=to_b64_image(favicon_file),
+                                  logo=to_b64_image(logo_img),
+                                  background=to_b64_image(background_img),
+                                  date=date.today()).encode('utf-8'))
+    fbuffer.seek(0)
+    html_str = reencode_html(fbuffer)
     if output_file_descr:
-        output_file_descr.write(html_str.encode('utf-8'))
+        output_file_descr.write(html_str)
     else:
         print(html_str)
+
+
+def reencode_html(input_html):
+    """
+    Converts all images from an html file to base64
+    """
+    fbuffer = StringIO()
+    my_regex = re.compile('.*(<img.+src=\")(.+?)"', re.IGNORECASE)
+    for line in input_html:
+        try:
+            item = re.finditer(my_regex, line).next().group(2)
+            fbuffer.write(line.replace(item, to_b64_image(item)))
+        except StopIteration:
+            fbuffer.write(line)
+    fbuffer.seek(0)
+    return fbuffer.read()
+
 
 def css_compress(*css_files):
     """ Reads file by file and returns the compressed version of the CSS """
@@ -85,19 +110,27 @@ def css_compress(*css_files):
         with open(item, 'r') as css_file:
             yield compress(css_file.read())
 
+
 def to_b64_image(image_filename):
     """ Returns a tuple with (b64content, imgtype) where:
         - b64content is a base64 representation of the input file
         - imgtype is the image type as detected by imghdr
     """
     try:
-        image_type = imghdr.what(image_filename)
-        if image_type is None:
+        img_info = parse(image_filename, rule='IRI')
+        extension = img_info['path'].split('.')[-1]
+        content = urlopen(image_filename)
+    except ValueError:  # image_filename is not a valid IRI, assume local file
+        extension = imghdr.what(image_filename)
+        if extension is None:
             return None
-        with open(image_filename, 'r') as image:
-            return (image.read().encode('base64'), image_type)
-    except (IOError, AttributeError):
+        content = open(image_filename, 'rb')
+    except (IOError, AttributeError, TypeError):
         return None
+    txt = 'data:image/{};base64,\n{}'.format(extension,
+                                            content.read().encode('base64'))
+    content.close()
+    return txt
 
 
 def md2html(**kwargs):
@@ -109,6 +142,7 @@ def md2html(**kwargs):
         Returns:
         - html:    HTML encoded string
         - md.Meta: Metadata as found in md header (if any)
+        - md.toc:  Table of Contents, if TOC in md_extensions
     """
 
     md_fileobject = kwargs.get('input_file', None)
@@ -118,7 +152,16 @@ def md2html(**kwargs):
     md_content = markdown.Markdown(extensions=['markdown.extensions.%s' % k
                                                for k in md_extensions])
     html = md_content.convert(md_fileobject.read().decode('utf-8'))
-    return html, md_content.Meta
+    if 'toc' in md_extensions:
+        if 'meta' in md_extensions:
+            return (html, md_content.Meta, md_content.toc)
+        else:
+            return (html, None, md_content.toc)
+    else:
+        if 'meta' in md_extensions:
+            return (html, md_content.Meta, None)
+        else:
+            return (html, None, None)
 
 if __name__ == "__main__":
     PARSER = argparse.ArgumentParser(description='Markdown to HTML converter',

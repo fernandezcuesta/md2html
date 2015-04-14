@@ -1,3 +1,3 @@
-{% if metadata.author %}&copy; {{ date.year }} {{ gen_author_list(metadata.author, metadata.email)|join(', ') }}{% endif %}
-<br>
-{% if metadata.copyright %}&copy; {{ date.year }} {{ gen_copyright_list(metadata.copyright)|join(', ') }}{% endif %}
+    {% if metadata.author %}&copy; {{ date.year }} {{ gen_author_list(metadata.author, metadata.email)|join(', ') }}{% endif %}
+    <br>
+    {% if metadata.copyright %}&copy; {{ date.year }} {{ gen_copyright_list(metadata.copyright)|join(', ') }}{% endif %}
