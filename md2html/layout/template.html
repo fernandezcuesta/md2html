@@ -6,12 +6,9 @@
     <meta http-equiv="Content-Style-Type" content="text/css" />
     <!-- Enable responsiveness on mobile devices -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-{% for item in metadata if item|upper not in ['CSS', 'TITLE', 'THEME'] %}
+{% for item in metadata if item|upper not in ['CSS', 'TITLE', 'THEME', 'LOGO', 'LOGOLINK', 'FAVICON', 'BACKGROUND'] %}
     <meta name="{{ item }}" content="{{ metadata[item]|join(', ') }}">
 {% endfor %}
-{% if 'date' not in metadata %}
-    <meta name="date" content="{{ date.strftime('%d-%B-%Y') }}">
-{% endif %}
 
     {% if 'title' in metadata %}<title>{{ metadata.title|join(' - ') }}</title>{% endif %}
 
@@ -33,11 +30,7 @@
 {%     for item in metadata.title %}
          <p>{{ item }}</p>
 {%       endfor %}
-{%     if 'date' in metadata %}
-       <h3>Date: {{ metadata.date|join(', ') }}</h3>
-{%     else %}
-       <h3>Date: {{ date.strftime('%d-%B-%Y') }}</h3>
-{%     endif %}
+       <h3>Date: {{ date }}</h3>
        </div>
          <div class="content">
 <!-- CONTENT PASSED FROM MARKDOWN CONVERSION -->

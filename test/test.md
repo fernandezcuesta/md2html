@@ -1,15 +1,16 @@
 Title:     My title
            my subtitle
 title:     3rd title
-author:    Jesus Fernández
+author:    John Doe
 email:     me@domain.com
-css:       acision.css
-           codehilite.css
-date:      07 Abril 2015
-copyright: Acision,http://www.acision.com
-copyright: Ericsson,http://ericsson.com
-theme:     layout-reverse
-           theme-redish
+css:       codehilite.css
+           lanyon.css
+           rednotebook.css
+date:      07 April 2015
+copyright: ACME,http://www.acme.org
+logo:      http://upload.wikimedia.org/wikipedia/commons/7/7e/Acme-logo.png
+theme:     theme-redish
+           layout-reverse
 
 # This is my markdown file
 
@@ -18,7 +19,7 @@ theme:     layout-reverse
 | Content     | More here  |
 | Row 2       | ...        |
 
-## h2 title
+## Section title
 - List 1 @level0
 - List 2 @level0
     - Level 1
@@ -51,7 +52,8 @@ Python code here with line numbers:
     
     print("Hello world!")
 
+Images should be encoded to base64 and embedded in the single-file html:
+![Image Alt](https://duckduckgo.com/assets/badges/logo_square.64.png)
 
-### End of test markdown
+# End of test markdown
 
-[TOC]

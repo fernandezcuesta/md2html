@@ -13,11 +13,12 @@ import re
 import argparse
 import sys
 import imghdr
+import time
 from cStringIO import StringIO
 from rfc3987 import parse
 from urllib2 import urlopen
 from csscompressor import compress
-from datetime import date
+
 
 THIS_DIR = os.path.dirname(os.path.abspath(__file__))
 HTML_TEMPLATE = 'layout/template.html'
@@ -68,8 +69,23 @@ def render_html(**kwargs):
         lambda css_list: ''.join(css_compress(*['css/%s' % css
                                                  for css in css_list]))
 
+    environment.globals['to_base64'] = \
+        lambda image: to_b64_image(image[0])
+
     template = environment.get_template(html_template)
     content, metadata, toc = md2html(**kwargs)
+
+    if 'logo' in metadata:  # input argument overrides markdown's metadata
+        logo_img = logo_img or metadata['logo'][0]
+
+    if 'favicon' in metadata:  # input argument overrides markdown's metadata
+        favicon_file = favicon_file or metadata['favicon'][0]
+
+    if 'background' in metadata:
+        background_img = background_img or metadata['background'][0]
+
+    markdown_date = ', '.join(metadata['date']) if 'date' in metadata \
+        else time.strptime('%d-%B-%Y')
 
     fbuffer = StringIO()
     fbuffer.write(template.render(css_lines=';'.join(css_compress(*css_files)),
@@ -79,7 +95,7 @@ def render_html(**kwargs):
                                   favicon=to_b64_image(favicon_file),
                                   logo=to_b64_image(logo_img),
                                   background=to_b64_image(background_img),
-                                  date=date.today()).encode('utf-8'))
+                                  date=markdown_date).encode('utf-8'))
     fbuffer.seek(0)
     html_str = reencode_html(fbuffer)
     if output_file_descr:
