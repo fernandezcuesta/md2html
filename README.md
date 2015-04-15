@@ -36,6 +36,7 @@ optional arguments:
 
 ## [TODO]
 
+* Let CSS and templates being in any location
 * Allow setting a list of templates directly in the markdown file
 * Allow both single-file HTML and multiple files (do not embed CSS or images)
 * Conversion to other formats
