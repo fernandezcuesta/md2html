@@ -10,13 +10,14 @@
         {% block content %}{% endblock content %}
       </div>
 
-{%   block sidebar %}{% include "layout/sidebar.html" %}{% endblock sidebar %}
-
       <div id="footer">
         <hr>
 {%         block footer %}{% include "layout/footer.html" %}{% endblock footer %}
       </div>
     </div>
+
+{%   block sidebar %}{% include "layout/sidebar.html" %}{% endblock sidebar %}
+
 
   </body>
 </html>

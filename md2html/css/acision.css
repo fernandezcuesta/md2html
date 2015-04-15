@@ -3,13 +3,14 @@
  *     | (_| | (__| \__ \ | (_) | | | |
  *      \__,_|\___|_|___/_|\___/|_| |_|
  *
- * CSS file for TLF Healthchecks
- * Template based in Lanyon:
- *  Designed, built, and released under MIT license by @mdo. Learn more at
- *  https://github.com/poole/lanyon.
+ * CSS file for TLF Healthchecks, extends lanyon.css
+ * Lanyon Designed, built, and released under MIT license by @mdo. Learn more at
+ * https://github.com/poole/lanyon.
 */
+
 html {
-    font-family: Verdana, sans-serif;
+
+    font-family: Verdana,Arial,Helvetica,"PT Sans",sans-serif;
 }
 
 body {
@@ -147,6 +148,7 @@ input[type=checkbox]:checked ~ [for="TOC"] span:last-of-type {
         margin:auto;
         max-width: 70em;
         padding: 1em;
+        overflow-x: auto;
         z-index: 1;
 }
 
@@ -226,7 +228,10 @@ pre:not(>codehilite) {
     margin-left: 2em;
     margin-right: 2em;
     display: block;
-    overflow-x: auto;
+    overflow: auto;
+    overflow-y: hidden;
+    max-width: 100%;
+    table-layout: fixed;
 }
 
 .codehilite, .codehilitetable .codehilite {
@@ -237,8 +242,12 @@ pre:not(>codehilite) {
 .codehilitetable .codehilite {
     background-color:transparent;
     padding-left: 16px;
-/*    margin: 0;*/
+    margin-left: 0;
 }
+
+/*.codehilitetable td:not(.linenos) {
+    width: 90%;
+}*/
 
 .code {
     font-family: monospace;
@@ -337,7 +346,7 @@ blockquote {
 
 table:not(.codehilitetable){
     font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
-    width: 70%;
+    width: 90%;
     border-collapse: collapse;
     margin: 2rem;
     border: 4px solid #a12;
@@ -383,12 +392,10 @@ table:not(.codehilitetable) tr:nth-child(even) {
   .sidebar {
     width: 50vw;
     left: -50vw;
-    position: absolute;
   }
   .layout-reverse .sidebar {
     right: 0vw;
     left: 100%;
-    position: absolute;
   }
   .sidebar-nav-item {
     padding-left: 1.5rem;
@@ -397,7 +404,6 @@ table:not(.codehilitetable) tr:nth-child(even) {
   }
 
   .sidebar-toggle {
-    position: fixed;
     width: 28px;
     -webkit-border-radius: 28px 28px 0px 28px;
     -moz-border-radius: 28px 28px 0px 28px;
@@ -418,13 +424,10 @@ table:not(.codehilitetable) tr:nth-child(even) {
       -ms-transform: translateX(50vw);
           transform: translateX(50vw);
   }
-.layout-reverse #sidebar-checkbox:checked ~ .sidebar {
-  -webkit-transform: translateX(-45vw);
-      -ms-transform: translateX(-45vw);
-          transform: translateX(-45vw);
-  }
+
 
 .layout-reverse #sidebar-checkbox:checked ~ .wrap,
+.layout-reverse #sidebar-checkbox:checked ~ .sidebar,
 .layout-reverse #sidebar-checkbox:checked ~ .sidebar-toggle {
   -webkit-transform: translateX(-50vw);
       -ms-transform: translateX(-50vw);
@@ -432,19 +435,29 @@ table:not(.codehilitetable) tr:nth-child(even) {
   }
 
 .layout-reverse .sidebar-toggle {
-    position: absolute;
     left: auto;
     right: 0;
 }
 
 .codehilitetable, .codehilite {
-   margin-left: 5px;
-   margin-right: 1px;
+   margin: 0;
    padding: 0 5px;
 }
 
+.codehilitetable {
+  padding: 0;
+}
 .codehilitetable .codehilite {
   padding-left: 5px;
+}
+
+table:not(.codehilitetable){
+   margin: 0;
+}
+
+
+#contentDiv {
+   padding: 2vw;
 }
 }
 

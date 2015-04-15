@@ -65,7 +65,7 @@ def render_html(**kwargs):
                            for item in copyright]
 
     environment.globals['css_compress'] = \
-        lambda css_list: ';'.join(css_compress(*['css/%s' % css
+        lambda css_list: ''.join(css_compress(*['css/%s' % css
                                                  for css in css_list]))
 
     template = environment.get_template(html_template)
@@ -90,7 +90,7 @@ def render_html(**kwargs):
 
 def reencode_html(input_html):
     """
-    Converts all images from an html file to base64
+    Embeds all images from an html file to base64
     """
     fbuffer = StringIO()
     my_regex = re.compile('.*(<img.+src=\")(.+?)"', re.IGNORECASE)
@@ -128,7 +128,7 @@ def to_b64_image(image_filename):
     except (IOError, AttributeError, TypeError):
         return None
     txt = 'data:image/{};base64,\n{}'.format(extension,
-                                            content.read().encode('base64'))
+                                             content.read().encode('base64'))
     content.close()
     return txt
 
@@ -152,7 +152,7 @@ def md2html(**kwargs):
     md_content = markdown.Markdown(extensions=['markdown.extensions.%s' % k
                                                for k in md_extensions])
     html = md_content.convert(md_fileobject.read().decode('utf-8'))
-    if 'toc' in md_extensions:
+    if any(['toc' in k for k in md_extensions]):
         if 'meta' in md_extensions:
             return (html, md_content.Meta, md_content.toc)
         else:
