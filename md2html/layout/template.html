@@ -33,6 +33,11 @@
 {%     for item in metadata.title %}
          <p>{{ item }}</p>
 {%       endfor %}
+{%     if 'date' in metadata %}
+       <h3>Date: {{ metadata.date|join(', ') }}</h3>
+{%     else %}
+       <h3>Date: {{ date.strftime('%d-%B-%Y') }}</h3>
+{%     endif %}
        </div>
          <div class="content">
 <!-- CONTENT PASSED FROM MARKDOWN CONVERSION -->
