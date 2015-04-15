@@ -190,7 +190,8 @@ if __name__ == "__main__":
 
     PARSER.add_argument('-T', '--template',
                         dest='html_template', default=HTML_TEMPLATE,
-                        type=str, help='HTML template for Jinja2')
+                        type=str, help='HTML template for Jinja2, '\
+                                       'defaults to {}'.format(HTML_TEMPLATE))
 
     PARSER.add_argument('-F', '--favicon',
                         dest='favicon',
@@ -204,9 +205,10 @@ if __name__ == "__main__":
                         dest='logo',
                         type=str, help='Logo image (PNG/BMP/JPG)')
 
-    PARSER.add_argument('-M', '--extensions', metavar='MARKDOWN_EXTENSIONS',
+    PARSER.add_argument('-M', '--extensions', metavar='MARKDOWN_EXTENSION',
                         dest='md_extensions', nargs='+', default=MD_EXTENSIONS,
-                        type=str, help='Extensions from markdown module')
+                        type=str, help='Extensions from markdown module, '\
+                                       'defaults to: {}'.format(MD_EXTENSIONS))
 
     PARSER.add_argument('input_file', default=sys.stdin,
                         type=argparse.FileType('r'),
