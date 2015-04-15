@@ -1,5 +1,5 @@
 # md2html
-Python Markdown to HTML convertor
+**Python Markdown to HTML convertor**
 
 ```
 **usage**: md2html.py [-h] [-C CSS_FILE [CSS_FILE ...]] [-T HTML_TEMPLATE]
@@ -29,6 +29,7 @@ optional arguments:
 ```
 
 - **Additional CSS styles can be defined in the markdown file metadata**
+    - It is assumed they're located in `/css` subfolder
 - **Logo, favicon and background images can be set directly in the markdown**
 - Any setting passed via CLI overrides these in the markdown, except for CSS (all are applied)
 
@@ -38,4 +39,4 @@ optional arguments:
 * Allow setting a list of templates directly in the markdown file
 * Allow both single-file HTML and multiple files (do not embed CSS or images)
 * Conversion to other formats
-* Global speedup
+* Global speedup, refactoring, ...

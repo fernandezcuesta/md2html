@@ -16,7 +16,7 @@ import imghdr
 import time
 from cStringIO import StringIO
 from rfc3987 import parse
-from urllib2 import urlopen
+from urllib2 import urlopen, HTTPError, URLError
 from csscompressor import compress
 
 
@@ -29,7 +29,7 @@ def render_html(**kwargs):
     """ Renders an html from jinja2 templates filled with content converted
         from markdown source
         Mandatory arguments:
-         - input_file: markdown input file object (passed to md2html)
+         - md_fileobject: markdown input file object (passed to md2html)
 
         Optional arguments:
 
@@ -66,8 +66,8 @@ def render_html(**kwargs):
                            for item in copyright]
 
     environment.globals['css_compress'] = \
-        lambda css_list: ''.join(css_compress(*['css/%s' % css
-                                                 for css in css_list]))
+        lambda css_list: ''.join(css_compress(['css/%s' % css
+                                               for css in css_list]))
 
     environment.globals['to_base64'] = \
         lambda image: to_b64_image(image[0])
@@ -88,7 +88,7 @@ def render_html(**kwargs):
         else time.strptime('%d-%B-%Y')
 
     fbuffer = StringIO()
-    fbuffer.write(template.render(css_lines=';'.join(css_compress(*css_files)),
+    fbuffer.write(template.render(css_lines=';'.join(css_compress(css_files)),
                                   content=content,
                                   metadata=metadata,
                                   toc=toc,
@@ -97,11 +97,12 @@ def render_html(**kwargs):
                                   background=to_b64_image(background_img),
                                   date=markdown_date).encode('utf-8'))
     fbuffer.seek(0)
-    html_str = reencode_html(fbuffer)
     if output_file_descr:
-        output_file_descr.write(html_str)
+        output_file_descr.write(reencode_html(fbuffer))
     else:
-        print(html_str)
+        print(reencode_html(fbuffer))
+    fbuffer.close()
+    return
 
 
 def reencode_html(input_html):
@@ -117,14 +118,21 @@ def reencode_html(input_html):
         except StopIteration:
             fbuffer.write(line)
     fbuffer.seek(0)
-    return fbuffer.read()
+    content = fbuffer.read()
+    fbuffer.close()
+    return content
 
 
-def css_compress(*css_files):
-    """ Reads file by file and returns the compressed version of the CSS """
+def css_compress(css_files):
+    """ Reads file by file and returns the compressed version of the CSS
+    css_files: list of files
+    """
     for item in css_files:
-        with open(item, 'r') as css_file:
-            yield compress(css_file.read())
+        try:
+            with open('{}/{}'.format(THIS_DIR,item), 'r') as css_file:
+                yield compress(css_file.read())
+        except IOError:
+            yield ''
 
 
 def to_b64_image(image_filename):
@@ -137,11 +145,14 @@ def to_b64_image(image_filename):
         extension = img_info['path'].split('.')[-1]
         content = urlopen(image_filename)
     except ValueError:  # image_filename is not a valid IRI, assume local file
-        extension = imghdr.what(image_filename)
-        if extension is None:
+        try:
+            extension = imghdr.what(image_filename)
+            if extension is None:
+                return None
+            content = open(image_filename, 'rb')
+        except (IOError, AttributeError, TypeError):
             return None
-        content = open(image_filename, 'rb')
-    except (IOError, AttributeError, TypeError):
+    except (HTTPError, URLError, TypeError):
         return None
     txt = 'data:image/{};base64,\n{}'.format(extension,
                                              content.read().encode('base64'))
@@ -149,10 +160,9 @@ def to_b64_image(image_filename):
     return txt
 
 
-def md2html(**kwargs):
+def md2html(md_fileobject, md_extensions=None):
     """ Converts markdown syntax to html
-        kwargs:
-         - input_file: markdown input file object
+         - md_fileobject: markdown input file object
          - md_extensions [optional]: list of extensions for markdown module
 
         Returns:
@@ -160,11 +170,9 @@ def md2html(**kwargs):
         - md.Meta: Metadata as found in md header (if any)
         - md.toc:  Table of Contents, if TOC in md_extensions
     """
+    if md_extensions is None or not isinstance(md_extensions, list):
+        md_extensions = MD_EXTENSIONS
 
-    md_fileobject = kwargs.get('input_file', None)
-    assert md_fileobject is not None
-
-    md_extensions = kwargs.get('md_extensions', MD_EXTENSIONS)
     md_content = markdown.Markdown(extensions=['markdown.extensions.%s' % k
                                                for k in md_extensions])
     html = md_content.convert(md_fileobject.read().decode('utf-8'))
@@ -190,7 +198,7 @@ if __name__ == "__main__":
 
     PARSER.add_argument('-T', '--template',
                         dest='html_template', default=HTML_TEMPLATE,
-                        type=str, help='HTML template for Jinja2, '\
+                        type=str, help='HTML template for Jinja2, '
                                        'defaults to {}'.format(HTML_TEMPLATE))
 
     PARSER.add_argument('-F', '--favicon',
@@ -207,11 +215,11 @@ if __name__ == "__main__":
 
     PARSER.add_argument('-M', '--extensions', metavar='MARKDOWN_EXTENSION',
                         dest='md_extensions', nargs='+', default=MD_EXTENSIONS,
-                        type=str, help='Extensions from markdown module, '\
+                        type=str, help='Extensions from markdown module, '
                                        'defaults to: {}'.format(MD_EXTENSIONS))
 
-    PARSER.add_argument('input_file', default=sys.stdin,
-                        type=argparse.FileType('r'),
+    PARSER.add_argument('md_fileobject', default=sys.stdin,
+                        type=argparse.FileType('r'), metavar='input_file',
                         help='Markdown input file')
 
     PARSER.add_argument('-O', '--output_file', default=sys.stdout,
@@ -221,6 +229,3 @@ if __name__ == "__main__":
     ARGS = PARSER.parse_args()
 
     render_html(**vars(ARGS))
-#    import codecs
-#    fichero = codecs.open('prueba.md', mode='r', encoding='utf-8')
-#    render_html(input_file=fichero)
