@@ -167,13 +167,13 @@ class MD2Html(object):
             """ Wrapper for css_compress handling with non-existing files """
             for item in css_files:
                 try:
-                    with open('{}/{}'.format(self.working_dir, item),
+                    with open('{}/css/{}'.format(self.working_dir, item),
                               'r') as css_file:
                         yield compress(css_file.read())
                 except IOError:
                     yield ''
 
-        return ''.join(css_wrapper(['css/%s' % css for css in css_files]))
+        return ''.join([css for css in css_wrapper(css_files)])
 
     def get_html(self, md_fileobject):
         """ Converts markdown syntax to html
