@@ -13,12 +13,12 @@ import re
 import argparse
 import sys
 import imghdr
-import time
 from cStringIO import StringIO
 from rfc3987 import parse
 from urllib2 import urlopen, HTTPError, URLError
 from csscompressor import compress
-
+from datetime import date
+from dateutil.parser import parse as date_parse
 
 HTML_TEMPLATE = 'template.html'
 MD_EXTENSIONS = ['codehilite', 'tables', "toc(marker='')", 'meta']
@@ -138,8 +138,9 @@ class MD2Html(object):
         if 'background' in metadata:
             background_img = background_img or metadata['background'][0]
 
-        markdown_date = ', '.join(metadata['date']) if 'date' in metadata \
-            else time.strptime('%d-%B-%Y')
+        markdown_date = date_parse(metadata['date'][0]) if 'date' in metadata \
+            else date.today()
+
 
         fbuffer = StringIO()
         fbuffer.write(template.render(css_lines=self.css_compress(css_files),

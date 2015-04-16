@@ -20,7 +20,7 @@
 
 {%     if logo %}
 {%      if 'logolink' in metadata %}
-        <a href="{{ metadata.logolink }}">{% endif %}<img src="{{ logo }}">
+        <a href="{{ metadata.logolink|join('') }}">{% endif %}<img src="{{ logo }}">
         </a>
 {%     endif %}
        <br>

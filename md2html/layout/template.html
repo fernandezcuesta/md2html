@@ -30,7 +30,7 @@
 {%     for item in metadata.title %}
          <p>{{ item }}</p>
 {%       endfor %}
-       <h3>Date: {{ date }}</h3>
+       <h3>{{ date.strftime('%d/%b/%Y') }}</h3>
        </div>
          <div class="content">
 <!-- CONTENT PASSED FROM MARKDOWN CONVERSION -->
