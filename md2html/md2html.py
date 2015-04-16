@@ -75,7 +75,6 @@ class MD2Html(object):
 
     def __init__(self):
         self.working_dir = os.getcwd()
-#                     os.path.dirname(os.path.abspath(__file__))
         self.html_template = HTML_TEMPLATE
         self.md_extensions = MD_EXTENSIONS
 
@@ -209,6 +208,11 @@ if __name__ == "__main__":
     PARSER.add_argument('-C', '--css', metavar='CSS_FILE',
                         dest='css_files', nargs='+', default=[],
                         type=str, help='CSS files')
+
+    PARSER.add_argument('-W', '--working-dir', metavar='BASE_FOLDER',
+                        dest='working_dir', default=os.getcwd(),
+                        type=str, help='Working base directory where '
+                                       '/css and /layout folders are found')
 
     PARSER.add_argument('-T', '--template',
                         dest='html_template', default=MD_TO_HTML.html_template,

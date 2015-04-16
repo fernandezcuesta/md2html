@@ -2,30 +2,33 @@
 **Python Markdown to HTML convertor**
 
 ```
-**usage**: md2html.py [-h] [-C CSS_FILE [CSS_FILE ...]] [-T HTML_TEMPLATE]
-                  [-F FAVICON] [-B BACKGROUND_IMG] [-L LOGO]
-                  [-M MARKDOWN_EXTENSION [MARKDOWN_EXTENSION ...]]
+usage: md2html.py [-h] [-C CSS_FILE [CSS_FILE ...]] [-W BASE_FOLDER]
+                  [-T HTML_TEMPLATE] [-F FAVICON] [-B BACKGROUND_IMG]
+                  [-L LOGO] [-M MARKDOWN_EXTENSION [MARKDOWN_EXTENSION ...]]
                   [-O OUTPUT_FILE]
                   input_file
 
 positional arguments:
-  input_file            *Markdown input file*
+  input_file            Markdown input file
 
 optional arguments:
-  -h, --help            *show this help message and exit*
+  -h, --help            show this help message and exit
   -C CSS_FILE [CSS_FILE ...], --css CSS_FILE [CSS_FILE ...]
-                        *CSS files*
+                        CSS files
+  -W BASE_FOLDER, --working-dir BASE_FOLDER
+                        Working base directory where /css and /layout folders are found
   -T HTML_TEMPLATE, --template HTML_TEMPLATE
-                        *HTML template for Jinja2*
+                        HTML template for Jinja2, defaults to template.html
   -F FAVICON, --favicon FAVICON
-                        *PNG/BMP/JPG favicon*
+                        PNG/BMP/JPG favicon
   -B BACKGROUND_IMG, --background BACKGROUND_IMG
-                        *PNG/BMP/JPG background image*
+                        PNG/BMP/JPG background image
   -L LOGO, --logo LOGO  Logo image (PNG/BMP/JPG)
   -M MARKDOWN_EXTENSION [MARKDOWN_EXTENSION ...], --extensions MARKDOWN_EXTENSION [MARKDOWN_EXTENSION ...]
-                        Extensions from markdown module, defaults to: ['codehilite', 'tables', "toc(marker='')", 'meta']
+                        Extensions from markdown module, defaults to ['codehilite', 'tables', "toc(marker='')", 'meta']
   -O OUTPUT_FILE, --output_file OUTPUT_FILE
-                        *HTML output file, defaults to **stdout***
+                        HTML output file, defaults to stdout
+
 ```
 
 - **Additional CSS styles can be defined in the markdown file metadata**
