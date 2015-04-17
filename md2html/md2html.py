@@ -79,6 +79,8 @@ class MD2Html(object):
             - working_dir:    Directory where /layout and /css are found
             - loglevel:       Debug level passed to logging
         """
+        # Remove all "None" input values
+        list(map(kwargs.pop, [item for item in kwargs if not kwargs[item]]))
 
         self.html_template = kwargs.get('html_template', self.html_template)
         self.working_dir = kwargs.get('working_dir', self.working_dir)
