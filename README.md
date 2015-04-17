@@ -36,6 +36,19 @@ optional arguments:
 - **Logo, favicon and background images can be set directly in the markdown**
 - Any setting passed via CLI overrides these in the markdown, except for CSS (all are applied)
 
+## Recognized metadata in markdown file:
+
+- **Title**: Document's title/s
+- **Author**: Author/s of the document
+- **email**: email addresses for each author
+- **date**: Document's creation date. If omitted, current date is shown instead
+- **css**: name of the CSS files under `/css` subfolder
+- **template**: name of the base template under `/layout` subfolder
+- **logo**: file or URL for the optional logo image
+- **logolink**: valid URL for the logo
+- **theme**: anything here will be passed as: `<body class="{{ }}">`
+- **background_img**: background image
+- **favicon**: favicon file (not .ico)
 
 ## [TODO]
 
@@ -44,3 +57,4 @@ optional arguments:
 * Allow both single-file HTML and multiple files (do not embed CSS or images)
 * Conversion to other formats
 * Global speedup, refactoring, ...
+* Check if logolink contains a valid URL
