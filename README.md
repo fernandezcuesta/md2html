@@ -55,6 +55,7 @@ optional arguments:
 * ~~Let CSS and templates being in any location~~
 * Allow setting a list of templates directly in the markdown file
 * Allow both single-file HTML and multiple files (do not embed CSS or images)
+* Fix TOC to allow pandoc's-like `--toc-depth`
 * Conversion to other formats
 * Global speedup, refactoring, ...
 * Check if logolink contains a valid URL

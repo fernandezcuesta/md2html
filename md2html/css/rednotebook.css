@@ -266,6 +266,10 @@ p {
         padding-left: 1.75rem;
 }
 
+li > p {
+        padding-left: 0;
+}
+
 .sidebar p {
         padding: 0;
 }
