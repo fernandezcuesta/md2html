@@ -14,6 +14,9 @@ import argparse
 import sys
 import imghdr
 import logging
+import codecs
+import chardet
+
 from cStringIO import StringIO
 from rfc3987 import parse
 from urllib2 import urlopen, HTTPError, URLError
@@ -120,7 +123,7 @@ class MD2Html(object):
             lambda image: self.to_b64(image[0])
 
         template = environment.get_template(self.html_template)
-        content, metadata, toc = self.get_html(kwargs.get('md_fileobject'))
+        content, metadata, toc = self.get_html(kwargs.get('md_contents'))
 
         if 'logo' in metadata:  # input argument overrides MD's metadata
             logo_img = logo_img or metadata['logo'][0]
@@ -224,9 +227,9 @@ class MD2Html(object):
 
         return ''.join([css for css in css_wrapper(css_files)])
 
-    def get_html(self, md_fileobject):
+    def get_html(self, md_contents):
         """ Converts markdown syntax to html
-             - md_fileobject: markdown input file object
+             - md_contents: markdown input file content
 
             Returns:
             - html:    HTML encoded string
@@ -237,7 +240,7 @@ class MD2Html(object):
         self.logger.debug('Generating markdown with extensions: %s',
                           ', '.join(extensions))
         md_content = markdown.Markdown(extensions=extensions)
-        html = md_content.convert(md_fileobject.read().decode('utf-8'))
+        html = md_content.convert(md_contents)  #.decode('utf-8'))
         if any(['toc' in k for k in self.md_extensions]):
             if 'meta' in self.md_extensions:
                 return (html, md_content.Meta, md_content.toc)
@@ -248,6 +251,30 @@ class MD2Html(object):
                 return (html, md_content.Meta, None)
             else:
                 return (html, None, None)
+
+def mdfile(input_file):
+    """ Open the input file detecting the encoding (UTF-8 with BOM) """
+    try:
+        bytes = min(32, os.path.getsize(input_file))
+        with open(input_file, 'rb') as raw:
+            header = raw.read(bytes)
+    
+            if header.startswith(codecs.BOM_UTF8):
+                encoding = 'utf-8-sig'
+            elif header.startswith(codecs.BOM_UTF16_LE) or \
+                 header.startswith(codecs.BOM_UTF16_BE):
+                encoding = 'utf-16'
+            elif header.startswith(codecs.BOM_UTF32_LE) or \
+                 header.startswith(codecs.BOM_UTF32_BE):
+                encoding = 'utf-32'
+            else:
+                encoding = 'utf-8'
+            
+            raw.seek(0)
+            data = raw.read().decode(encoding)
+        return data
+    except OSError:
+        raise argparse.ArgumentTypeError("No such file: %s" % input_file)
 
 if __name__ == "__main__":
 
@@ -288,8 +315,8 @@ if __name__ == "__main__":
                         help='Extensions from markdown module, defaults to '
                              '{}'.format(MD_TO_HTML.md_extensions))
 
-    PARSER.add_argument('md_fileobject', default=sys.stdin,
-                        type=argparse.FileType('r'), metavar='input_file',
+    PARSER.add_argument('md_contents',
+                        type=mdfile, metavar='input_file',
                         help='Markdown input file')
 
     PARSER.add_argument('-O', '--output_file', default=sys.stdout,
