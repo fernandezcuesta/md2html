@@ -15,7 +15,6 @@ import sys
 import imghdr
 import logging
 import codecs
-import chardet
 
 from cStringIO import StringIO
 from rfc3987 import parse
