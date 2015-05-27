@@ -68,7 +68,7 @@ class MD2Html(object):
         """ Renders an html from jinja2 templates filled with content converted
             from markdown source
             Mandatory arguments:
-            - md_fileobject: markdown input file object (passed to get_html)
+            - md_contents: markdown input file content (passed to get_html)
 
             Optional arguments:
 
@@ -83,12 +83,20 @@ class MD2Html(object):
         """
         # Remove all "None" input values
         list(map(kwargs.pop, [item for item in kwargs if not kwargs[item]]))
+        if 'loglevel ' in kwargs:
+            self.logger.setLevel(kwargs.get('loglevel'))
 
         self.html_template = kwargs.get('html_template', self.html_template)
         self.working_dir = kwargs.get('working_dir', self.working_dir)
+
+        if not os.path.isfile('%s/layout/%s' % (self.working_dir,
+                                                self.html_template)):
+            self.logger.error('Base template "%s" not found in %s/layout.',
+                              self.html_template,
+                              self.working_dir)
+            return
+
         self.md_extensions = kwargs.get('md_extensions', self.md_extensions)
-        if 'loglevel' in kwargs:
-            self.logger.setLevel(kwargs.get('loglevel'))
         css_files = kwargs.get('css_files', [])
         output_file_descr = kwargs.get('output_file', None)
         favicon_file = kwargs.get('favicon', None)

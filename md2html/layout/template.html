@@ -20,7 +20,9 @@
     <!-- CSS styles -->
     <style type="text/css">
         {{ css_lines }}
-        {% if 'css' in metadata %}{{ css_compress(metadata['css']) }}{% endif %}
+    {% if 'css' in metadata %}/* CSS from metadata: {{ metadata['css'] }} */
+        {{ css_compress(metadata['css']) }}
+    {% endif %}
 
     </style>
 {%   endblock head%}

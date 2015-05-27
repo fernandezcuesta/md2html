@@ -1,5 +1,5 @@
 # md2html
-**Python Markdown to HTML convertor**
+**Python Markdown to single-file HTML convertor**
 
 ```
 usage: md2html.py [-h] [-C CSS_FILE [CSS_FILE ...]] [-W BASE_FOLDER]
@@ -33,6 +33,7 @@ optional arguments:
 
 - **Additional CSS styles can be defined in the markdown file metadata**
     - It is assumed they're located in `/css` subfolder
+- **Base HTML template** can be set, defaults to `template.html`
 - **Logo, favicon and background images can be set directly in the markdown**
 - Any setting passed via CLI overrides these in the markdown, except for CSS (all are applied)
 
@@ -59,3 +60,4 @@ optional arguments:
 * Conversion to other formats
 * Global speedup, refactoring, ...
 * Check if logolink contains a valid URL
+* Complete refactoring
