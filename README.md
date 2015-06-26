@@ -39,12 +39,15 @@ optional arguments:
 
 ## Recognized metadata in markdown file:
 
-- **Title**: Document's title/s
-- **Author**: Author/s of the document
-- **email**: email addresses for each author
 - **date**: Document's creation date. If omitted, current date is shown instead
+
+## Recognized by default template file:
+
+- **Title**: Document's title/s
 - **css**: name of the CSS files under `/css` subfolder
 - **template**: name of the base template under `/layout` subfolder
+- **Author**: Author/s of the document
+- **email**: email addresses for each author
 - **logo**: file or URL for the optional logo image
 - **logolink**: valid URL for the logo
 - **theme**: anything here will be passed as: `<body class="{{ }}">`
@@ -54,10 +57,10 @@ optional arguments:
 ## [TODO]
 
 * ~~Let CSS and templates being in any location~~
-* Allow setting a list of templates directly in the markdown file
-* Allow both single-file HTML and multiple files (do not embed CSS or images)
+* ~~Allow setting a list of templates directly in the markdown file~~ moved most part of the logic to the templates
+* Allow both HTML-embedded and online HTML (do not embed CSS or images for online resources)
 * Fix TOC to allow pandoc's-like `--toc-depth`
 * Conversion to other formats
-* Global speedup, refactoring, ...
-* Check if logolink contains a valid URL
+* ~~Global speedup, refactoring, ...~~
+* ~~Check if logolink contains a valid URL~~ moved extra logic to templates
 * Complete refactoring
