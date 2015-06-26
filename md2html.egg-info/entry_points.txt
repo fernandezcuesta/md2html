@@ -1,3 +1,0 @@
-[console_scripts]
-md2html = md2html:argument_parse
-
