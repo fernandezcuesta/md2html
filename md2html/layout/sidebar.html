@@ -18,13 +18,15 @@
       <br>
       <div class="sidebar-item">
 
-{%     if logo %}
+{%     if 'logo' in metadata %}
 {%      if 'logolink' in metadata %}
-        <a href="{{ metadata.logolink|join('') }}">{% endif %}<img src="{{ logo }}">
+        <a href="{{ metadata.logolink|join('') }}">{% endif %}<img src="{{ to_base64(metadata.logo) }}">
         </a>
 {%     endif %}
        <br>
-{%     if metadata.copyright %}<p>&copy; {{ date.year }} {{ gen_copyright_list(metadata.copyright)|join(', ') }}</p>{% endif %}
+{%     if metadata.copyright %}
+       <p>&copy; {{ date.year }}{{ hrefs_from_keypair(metadata.copyright)|join(', ') }}</p>
+{%     endif %}
       </div>
 
       </nav>

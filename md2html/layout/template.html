@@ -1,31 +1,23 @@
 {% extends "base.html" %}
     {% block head%}
-    <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta http-equiv="Content-Style-Type" content="text/css" />
-    <!-- Enable responsiveness on mobile devices -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-{% for item in metadata if item|upper not in ['CSS', 'TITLE', 'THEME', 'LOGO', 'LOGOLINK', 'FAVICON', 'BACKGROUND'] %}
+{% for item in metadata if item|upper not in ['CSS', 'TITLE'] %}
     <meta name="{{ item }}" content="{{ metadata[item]|join(', ') }}">
 {% endfor %}
 
     {% if 'title' in metadata %}<title>{{ metadata.title|join(' - ') }}</title>{% endif %}
 
-    {% if favicon %}
+    {% if 'favicon' in metadata %}
 <!-- FAVICON -->
-<link id="favicon" rel="icon" href="{{ favicon }}">
+<link id="favicon" rel="icon" href="{{ to_base64(metadata.favicon) }}">
     {% endif %}
 
+{% if 'css' in metadata %}
     <!-- CSS styles -->
     <style type="text/css">
-        {{ css_lines }}
-    {% if 'css' in metadata %}/* CSS from metadata: {{ metadata['css'] }} */
-        {{ css_compress(metadata['css']) }}
-    {% endif %}
-
+        {{ css_compress(metadata.css) }}
     </style>
-{%   endblock head%}
+{% endif %}
+{%   endblock head %}
 
 {%    block content %}
  <div class="title">
@@ -44,4 +36,3 @@
 {%     endif %}
        </div>
 {%    endblock content %}
-

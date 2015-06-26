@@ -1,19 +1,23 @@
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<!DOCTYPE html>
+<html lang="en">
   <head>
+    <meta charset="utf-8" />
+    <!-- Enable responsiveness on mobile devices -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
     {% block head%}{% endblock head%}
   </head>
 
-  <body{% if background %} background="{{ background }}"{% endif %}{% if 'theme' in metadata %} class="{{ metadata['theme']|join(' ') }}"{% endif %}>
+  <body{% if 'background' in metadata %} background="{{ to_base64(metadata.background) }}"{% endif %}{% if 'theme' in metadata %} class="{{ metadata['theme']|join(' ') }}"{% endif %}>
 
     <div class="wrap">
       <div id="contentDiv">
         {% block content %}{% endblock content %}
       </div>
 
-      <div id="footer">
+      <footer>
         <hr>
 {%         block footer %}{% include "footer.html" %}{% endblock footer %}
-      </div>
+      </footer>
     </div>
 
 {%   block sidebar %}{% include "sidebar.html" %}{% endblock sidebar %}

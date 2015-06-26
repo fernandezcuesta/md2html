@@ -1,0 +1,4 @@
+- v0.0.4 - Fix tests
+- v0.0.3 - Remove many layout-specific settings from input args, small refactor
+- v0.0.2 - Working version with settings either in markdown or input arguments
+- v0.0.1 - Initial version

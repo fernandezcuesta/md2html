@@ -1,0 +1,8 @@
+csscompressor >= 0.9.3
+Jinja2 >= 2.7.3
+rfc3987
+python-dateutil
+six
+Markdown >= 2.6.1
+MarkupSafe
+Pygments >= 2.0.2
