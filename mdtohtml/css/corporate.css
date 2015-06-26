@@ -1,0 +1,74 @@
+/*       __ _  ___ _ ___ _  ___  _ __  
+ *      / _` |/ __| / __| |/ _ \| '_ \ 
+ *     | (_| | (__| \__ \ | (_) | | | |
+ *      \__,_|\___|_|___/_|\___/|_| |_|
+ *
+ * CSS style for Acision markdown to HTML documents, extends rednotebook.css
+ *
+*/
+
+/* Acision logo instead of burger */
+.sidebar-toggle {
+  position: fixed;
+  top:  1rem;
+  left: 1rem;
+  display: block;
+  width: 52px;
+  color: #f3efef;
+  background-color: transparent;
+  -webkit-border-radius: 52px 52px 0 52px;
+  -moz-border-radius: 52px 52px 0 52px;
+  -o-border-radius: 52px 52px 0 52px;
+  border-radius: 52px 52px 0 52px; /* Acision logo */
+  cursor: pointer;
+  font-size: 1px;
+}
+
+.sidebar-toggle:before { 
+  -webkit-border-radius: 52px 52px 0 52px;
+  -moz-border-radius: 52px 52px 0 52px;
+  -o-border-radius: 52px 52px 0 52px;
+  border-radius: 52px 52px 0 52px;
+  font-family: Arial;
+  color: #f3efef;
+  font-size: 1px;
+  padding: 24px 0 0 0;
+  border: solid #aa1123 14px;
+  text-decoration: none;
+  display: block;
+  content: " ";
+  width: 100%;
+  padding-bottom: .125rem;
+  border-bottom-right-radius: 0;
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+.theme-redish #sidebar-checkbox:checked ~ .sidebar-toggle
+{
+  background-color: whitesmoke;
+}
+
+/**************   RESPONSIVE DESIGN  **************/
+
+@media (max-width: 767px) {
+
+  .sidebar-toggle {
+    width: 28px;
+    -webkit-border-radius: 28px 28px 0px 28px;
+    -moz-border-radius: 28px 28px 0px 28px;
+    -o-border-radius: 28px 28px 0px 28px;
+    border-radius: 28px 28px 0px 28px;
+  }
+  .sidebar-toggle:before {
+    -webkit-border-radius: 28px 28px 0px 28px;
+    -moz-border-radius: 28px 28px 0px 28px;
+    -o-border-radius: 28px 28px 0px 28px;
+    border-radius: 28px 28px 0px 28px;
+    padding: 12px 0 0 0;
+    border: solid #aa1123 8px;
+  }
+
+}
+

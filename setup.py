@@ -6,7 +6,7 @@ requires = ['csscompressor >= 0.9.3', 'Jinja2 >= 2.7.3', 'rfc3987', 'python-date
 
 entry_points = {
     'console_scripts': [
-         'md2html = md2html:argument_parse'
+         'md2html = mdtohtml:argument_parse'
             ]
 }
 
@@ -23,7 +23,7 @@ setup(
     author_email='fernandez.cuesta@gmail.com',
     description="Yet another markdown to HTML convertor, with embedded images and CSS",
     long_description=README + '\n' + CHANGELOG,
-    packages=['md2html'],
+    packages=['mdtohtml'],
     include_package_data=True,
     install_requires=requires,
     entry_points = entry_points,

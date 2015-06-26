@@ -80,8 +80,6 @@ class MD2Html(object):
         self.html_template = HTML_TEMPLATE
         self.md_extensions = MD_EXTENSIONS
         self.logger = init_logger()
-        self.logger.info(self.working_dir)
-        self.logger.info(__file__)
 
     def main(self, md_file, **kwargs):
         """ Renders an html from jinja2 templates filled with content converted
