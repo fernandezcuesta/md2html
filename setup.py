@@ -1,12 +1,15 @@
 #!/usr/bin/env python
 from setuptools import setup
 
+import md2html
+
+
 requires = ['csscompressor >= 0.9.3', 'Jinja2 >= 2.7.3', 'rfc3987', 'python-dateutil', 'six',
             'Markdown >= 2.6.1', 'MarkupSafe', 'Pygments >= 2.0.2']
 
 entry_points = {
     'console_scripts': [
-         'md2html = mdtohtml:argument_parse'
+         'tohtml = arguments_parse:arguments_parse'
             ]
 }
 
@@ -17,13 +20,13 @@ CHANGELOG = open('changelog.md').read()
 
 setup(
     name="md2html",
-    version="0.0.3",
+    version=md2html.__version__,
     url='https://github.com/fernandezcuesta/md2html',
     author='JM Fernandez',
     author_email='fernandez.cuesta@gmail.com',
     description="Yet another markdown to HTML convertor, with embedded images and CSS",
     long_description=README + '\n' + CHANGELOG,
-    packages=['mdtohtml'],
+    packages=['md2html'],
     include_package_data=True,
     install_requires=requires,
     entry_points = entry_points,

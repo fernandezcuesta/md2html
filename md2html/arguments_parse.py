@@ -11,7 +11,7 @@ import argparse
 import md2html
 
 
-def argument_parse():
+def arguments_parse():
     """ Argument parser for main method
     """
     MD_TO_HTML = md2html.MD2Html()
@@ -69,4 +69,4 @@ def argument_parse():
 
 
 if __name__ == "__main__":
-    argument_parse()
+    arguments_parse()

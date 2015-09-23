@@ -1,0 +1,3 @@
+[submodule "Python-Markdown"]
+	path = Python-Markdown
+	url = git@github.com:fernandezcuesta/Python-Markdown.git

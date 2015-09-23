@@ -1,2 +1,2 @@
-include mdtohtml/layout/*
-include mdtohtml/css/*
+include md2html/layout/*
+include md2html/css/*

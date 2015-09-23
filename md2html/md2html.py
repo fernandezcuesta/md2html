@@ -22,7 +22,10 @@ from datetime import date
 from dateutil.parser import parse as date_parse
 
 HTML_TEMPLATE = 'template.html'
-MD_EXTENSIONS = ["codehilite", "tables", "toc(marker='')", "meta"]
+MD_EXTENSIONS = ["codehilite(pygments_style=emacs)",
+                 "tables",
+                 "toc(marker='', toc_depth=1)",
+                 "meta"]
 DEFAULT_LOGLEVEL = 'INFO'
 
 
@@ -126,6 +129,11 @@ class MD2Html(object):
 
         environment.globals['hrefs_from_keypair'] = \
             lambda keypair: [u'<a href={1}>{0}</a>'.format(*item.split(','))
+                             for item in keypair]
+
+        # TODO: Verify that item passed to function can be split by ','
+        environment.globals['mailto_from_keypair'] = \
+            lambda keypair: [u'<a href="mailto:{1}">{0}</a>'.format(*item.split(','))
                              for item in keypair]
 
         environment.globals['hrefs_from_lists'] = \
